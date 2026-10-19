@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#bg)"/>
+  <!-- Calendar Body -->
+  <rect x="12" y="14" width="40" height="40" rx="8" fill="#1e293b" stroke="url(#gold)" stroke-width="2"/>
+  <!-- Calendar Header -->
+  <path d="M 12 22 C 12 18 14 14 20 14 L 44 14 C 50 14 52 18 52 22 L 52 25 L 12 25 Z" fill="url(#gold)"/>
+  <!-- Binder Rings -->
+  <rect x="20" y="10" width="4" height="8" rx="2" fill="#e2e8f0"/>
+  <rect x="40" y="10" width="4" height="8" rx="2" fill="#e2e8f0"/>
+  <!-- Crescent and Star inside Calendar -->
+  <path d="M 33 30 A 10 10 0 0 0 33 48 A 8 8 0 0 1 33 34 A 10 10 0 0 0 33 30 Z" fill="url(#gold)"/>
+  <polygon points="38,36 39,38 41.5,38 39.5,39.5 40.5,42 38,40.5 35.5,42 36.5,39.5 34.5,38 37,38" fill="url(#gold)"/>
+</svg>
