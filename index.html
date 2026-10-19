@@ -781,6 +781,97 @@
     /* Fade-in animation */
     .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
     .fade-in.visible { opacity: 1; transform: translateY(0); }
+  
+    /* ─── PRINT STYLES ─── */
+    @media print {
+      body { background: white !important; color: black !important; }
+      header, #home, #countdown, #events, #converter, #months, #hadith, footer, .cal-nav-btn, .cal-view-selector, .hero-cta, #scrollTop {
+        display: none !important;
+      }
+      #calendar { padding: 0 !important; background: white !important; }
+      .calendar-wrapper { border: 1px solid #ccc !important; box-shadow: none !important; }
+      .cal-day { border: 1px solid #ddd !important; color: black !important; min-height: 70px !important; }
+      .cal-day-greg, .cal-day-bengali { color: #555 !important; }
+      .cal-header { background: #eee !important; color: black !important; }
+      .cal-month-arabic, .cal-month-en { color: black !important; }
+    }
+
+    /* ─── CALENDAR VIEW CONTROLS & BENGALI STYLES ─── */
+    .cal-view-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .cal-view-selector {
+      display: flex; gap: 6px; background: rgba(13,6,32,0.4);
+      padding: 4px; border-radius: var(--radius-sm); border: 1px solid var(--border);
+    }
+    .view-btn {
+      background: none; border: none; color: var(--text-muted);
+      padding: 7px 16px; border-radius: 6px; font-size: 0.8rem; font-weight: 600;
+      cursor: pointer; transition: var(--transition);
+    }
+    .view-btn.active { background: var(--gold); color: #000; }
+    .view-btn:hover:not(.active) { color: var(--gold); }
+
+    .cal-action-btns {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .btn-action-sm {
+      background: var(--gold-dim); border: 1px solid var(--border);
+      color: var(--gold); padding: 7px 14px; border-radius: var(--radius-sm);
+      font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: var(--transition);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .btn-action-sm:hover { background: rgba(240,192,64,0.25); transform: translateY(-1px); }
+
+    .cal-day-bengali {
+      font-size: 0.65rem; color: #81c784; margin-top: 2px;
+      font-family: 'Noto Serif Bengali', serif;
+    }
+    .hero-bengali-date {
+      font-size: 1.15rem; color: #81c784; font-family: 'Noto Serif Bengali', serif;
+      margin-top: 6px; font-weight: 600;
+    }
+
+    /* ─── MOON SIGHTING NOTICE BANNER ─── */
+    .moon-notice-banner {
+      background: rgba(240,192,64,0.1);
+      border: 1px solid rgba(240,192,64,0.3);
+      border-left: 4px solid var(--gold);
+      border-radius: var(--radius-sm);
+      padding: 14px 18px; margin-bottom: 24px;
+      font-size: 0.82rem; color: var(--silver); line-height: 1.6;
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+    .moon-notice-banner i { color: var(--gold); font-size: 1.1rem; margin-top: 2px; flex-shrink: 0; }
+
+    /* ─── AGENDA & WEEKLY VIEW CONTAINER ─── */
+    .agenda-view-wrap {
+      display: none; background: var(--bg-card); border-radius: var(--radius);
+      border: 1px solid var(--border); padding: 24px;
+    }
+    .agenda-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px; border-bottom: 1px solid var(--border);
+      transition: var(--transition);
+    }
+    .agenda-item:hover { background: rgba(240,192,64,0.05); }
+    .agenda-left { display: flex; align-items: center; gap: 16px; }
+    .agenda-date-box {
+      background: var(--gold-dim); border: 1px solid var(--border);
+      border-radius: 8px; width: 54px; height: 54px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+    }
+    .agenda-day { font-size: 1.2rem; font-weight: 700; color: var(--gold); line-height: 1; }
+    .agenda-month { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; }
+
+    /* Personal Reminder indicator */
+    .reminder-badge {
+      display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+      background: #ff5252; margin-left: 4px;
+    }
+
   </style>
 </head>
 <body>
@@ -858,6 +949,7 @@
   <div class="hero-hijri-en" id="heroHijriEn">Loading Hijri Date…</div>
   <div class="hero-day-name" id="heroDayName"></div>
   <div class="hero-gregorian" id="heroGregorian"></div>
+  <div class="hero-bengali-date" id="heroBengali">—</div>
 
   <div class="hero-cta">
     <a href="#calendar" class="btn btn-gold"><i class="fa fa-calendar-alt"></i> View Calendar</a>
@@ -874,6 +966,34 @@
       <p class="section-sub">Navigate through the Islamic lunar calendar month by month</p>
       <div class="ornament"></div>
     </div>
+    
+    <!-- Moon Sighting & Bangladesh Notice -->
+    <div class="moon-notice-banner fade-in">
+      <i class="fa fa-moon"></i>
+      <div>
+        <strong>Notice on Islamic Dates in Bangladesh & South Asia:</strong>
+        Calculated Hijri dates reflect standardized astronomical calculations (Umm al-Qura). Because Islamic lunar months begin with verified visual sighting of the crescent moon, local dates in Bangladesh and neighboring countries may vary by 1 day based on official announcements from the National Moon Sighting Committee (জাতীয় চাঁদ দেখা কমিটি).
+      </div>
+    </div>
+
+    <!-- Calendar View Switcher & Actions -->
+    <div class="cal-view-bar fade-in">
+      <div class="cal-view-selector">
+        <button class="view-btn active" id="btnViewMonth" onclick="setCalendarView('month')"><i class="fa fa-th"></i> Month</button>
+        <button class="view-btn" id="btnViewWeek" onclick="setCalendarView('week')"><i class="fa fa-calendar-week"></i> Week</button>
+        <button class="view-btn" id="btnViewAgenda" onclick="setCalendarView('agenda')"><i class="fa fa-list"></i> Agenda</button>
+      </div>
+
+      <div class="cal-action-btns">
+        <button class="btn-action-sm" onclick="exportIslamicEventsICS()" title="Export Islamic Occasions to Google Calendar / Apple Calendar / Outlook">
+          <i class="fa fa-download"></i> Export (.ICS)
+        </button>
+        <button class="btn-action-sm" onclick="window.print()" title="Print Current Month View">
+          <i class="fa fa-print"></i> Print Calendar
+        </button>
+      </div>
+    </div>
+
     <div class="calendar-wrapper fade-in">
       <div class="cal-header">
         <button class="cal-nav-btn" id="calPrev" aria-label="Previous month">&#8249;</button>
@@ -902,6 +1022,7 @@
         <div class="legend-item"><div class="legend-dot" style="background:rgba(124,77,255,0.4);border:1px solid var(--accent2)"></div>Friday</div>
       </div>
     </div>
+    <div class="agenda-view-wrap" id="agendaViewWrap"></div>
   </div>
 </section>
 
